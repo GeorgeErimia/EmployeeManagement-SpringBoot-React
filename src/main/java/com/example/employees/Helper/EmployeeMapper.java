@@ -3,7 +3,7 @@ package com.example.employees.Helper;
 import com.example.employees.DTOs.EmployeeDTO;
 import com.example.employees.Model.Employee;
 
-// CLASS THAT MAPS EMPLOYEE ENTITIES TO EMPLOYEE DTOS AND VICE VERSA
+// CLASS THAT HELPS MAP EMPLOYEE ENTITIES TO EMPLOYEE DTOS AND VICE VERSA
 public class EmployeeMapper {
 
     public static EmployeeDTO mapToEmployeeDTO(Employee employee) {
