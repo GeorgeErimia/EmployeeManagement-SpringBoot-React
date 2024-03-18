@@ -3,7 +3,9 @@ package com.example.employees.Service.Impl;
 import com.example.employees.DTOs.EmployeeDTO;
 import com.example.employees.Exception.ResourceNotFoundException;
 import com.example.employees.Helper.EmployeeMapper;
+import com.example.employees.Model.Department;
 import com.example.employees.Model.Employee;
+import com.example.employees.Repository.DepartmentRepository;
 import com.example.employees.Repository.EmployeeRepository;
 import com.example.employees.Service.EmployeeService;
 import lombok.AllArgsConstructor;
@@ -17,10 +19,16 @@ import java.util.List;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private EmployeeRepository employeeRepository;
+    private DepartmentRepository departmentRepository;
 
     @Override
     public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) {
         Employee employee = EmployeeMapper.mapToEmployee(employeeDTO);
+
+        Department department = departmentRepository.findById(employeeDTO.getDepartmentId())
+                .orElseThrow(() -> new ResourceNotFoundException("Department with ID: " + employeeDTO.getDepartmentId() + " does NOT exist!"));
+        employee.setDepartment(department);
+
         Employee savedEmployee = employeeRepository.save(employee);
 
         return EmployeeMapper.mapToEmployeeDTO(savedEmployee);
@@ -52,6 +60,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setFirstName(updatedEmployee.getFirstName());
         employee.setLastName(updatedEmployee.getLastName());
         employee.setEmail(updatedEmployee.getEmail());
+
+        Department department = departmentRepository.findById(updatedEmployee.getDepartmentId())
+                .orElseThrow(() -> new ResourceNotFoundException("Department with ID: " + updatedEmployee.getDepartmentId() + " does NOT exist!"));
+        employee.setDepartment(department);
 
         Employee updatedEmployeeObj = employeeRepository.save(employee);
 
